@@ -1,0 +1,54 @@
+@model EmailViewModel
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" ><a asp-controller="Home" asp-action="Index">Home</a></li>
+    <li class="breadcrumb-item" ><a asp-controller="User" asp-action="UserSettings" asp-route-Email="@Model.FormerEmailAddress">Account Settings</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Change Email Settings</li>
+  </ol>
+</nav>
+
+<div class="row justify-content-center">
+<form asp-action="ChangeEmail">
+    <div class="row">
+        <!-- Email -->
+        <div class="col-md-6">
+            <div class="form-group">
+            <label asp-for="FormerEmailAddress" class="control-label">Previous Email</label>
+            <input asp-for="FormerEmailAddress" class="form-control" readonly />
+            
+            </div>
+        </div>
+        <!-- New Email -->
+        <div class="col-md-6">
+            <div class="form-group">
+            <label asp-for="NewEmailAddress" class="control-label">New Email</label>
+            <input type="email" asp-for="NewEmailAddress" class="form-control">
+            <span asp-validation-for="NewEmailAddress" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+  
+        <!-- Notifications -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" asp-for="Notifications" class="form-control">
+                    <label class="form-check-label" class="control-label" asp-for="Notifications">Notifications</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+
+<!-- Buttons -->
+<div class="row justify-content-center">
+        <div class="form-group">
+            <input type="submit" value="Save Changes" class="btn pinkSolid"/>
+            <a class="btn pinkHollow" asp-controller="User" asp-action="UserSettings" asp-route-Email="@Model.FormerEmailAddress">Back</a>
+        </div>
+    </div>
+</form>
+</div>

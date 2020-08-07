@@ -1,0 +1,29 @@
+@model CityViewModel
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" ><a asp-controller="Home" asp-action="AdminHome">Admin Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Creating a new City</li>
+  </ol>
+</nav>
+<div class="text-center">
+<form asp-action="CreateCity">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <!-- City Name -->
+        <div class="col">
+            <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="form-group">
+            <input type="submit" value="Add a City" class="btn pinkSolid"/>
+            <a class="btn pinkHollow" asp-controller="Home" asp-action="AdminHome">Cancel</a>
+        </div>
+    </div>
+</form>
+</div>

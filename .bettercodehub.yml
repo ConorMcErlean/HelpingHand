@@ -1,0 +1,36 @@
+component_depth: 1
+languages:
+- csharp
+- javascript
+
+exclude:
+- .*/bin/.*
+- .*/obj/.*
+- /.vscode/.*
+- /.vs/.*
+- /.idea/.*
+- /.github/.*
+- .*/[Hh]ighmap\.js
+- ^[Dd]ependencies/
+- (^|/)dist/
+- ^deps/
+- (^|/)configure$
+- (^|/)config\.guess$
+- (^|/)config\.sub$
+- (^|/)aclocal\.m4
+- (^|/)libtool\.m4
+- (^|/)ltoptions\.m4
+- (^|/)ltsugar\.m4
+- (^|/)ltversion\.m4
+- (^|/)lt~obsolete\.m4
+- (^|/)dotnet-install\.(ps1|sh)$
+- (\.|-)min\.(js|css)$
+- ([^\s]*)import\.(css|less|scss|styl)$
+- .*/bootstrap([^.]*)\.(js|css|less|scss|styl)$
+- .*/custom\.bootstrap([^\s]*)(js|css|less|scss|styl)$
+- .*/jquery([^.]*)\.js$
+- .*/jquery.*
+- .*/bootstrap.*
+- .*/jquery\-\d\.\d+(\.\d+)?\.js$
+- .*/bootbox\.js
+- (^|/)[Pp]ackages\/.+\.\d+\/

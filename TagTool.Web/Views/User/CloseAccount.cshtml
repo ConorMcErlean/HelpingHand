@@ -1,0 +1,29 @@
+@model CloseUserViewModel
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" ><a asp-controller="Home" asp-action="AdminHome">Admin Home</a></li>
+    <li class="breadcrumb-item" ><a asp-controller="User" asp-action="ViewAccounts">View All Users</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Confirm Account Removal</li>
+  </ol>
+</nav>
+
+<form asp-action="CloseAccount">
+    <label asp-for="EmailAddress" class="control-label">Email:</label>
+    <input asp-for="EmailAddress" class="form-control" readonly>
+    
+    <label asp-for="UserID" class="control-label">User ID:</label>
+    <input asp-for="UserID" class="form-control" readonly>
+            
+     <label asp-for="Role" class="control-label">Role:</label>
+    <input asp-for="Role" class="form-control" readonly>
+
+     <label asp-for="Name" class="control-label">Name:</label>
+    <input asp-for="Name" class="form-control" readonly>
+<div class="form-group">
+        <a class="btn pinkHollow" asp-controller="User" asp-action="ViewAccounts">Cancel</a>
+        <input type="submit" value="CloseAccount" class="btn pinkSolid"/>
+        
+    </div>
+
+</form>

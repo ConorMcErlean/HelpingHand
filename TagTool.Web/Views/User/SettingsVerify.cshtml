@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Verify Account";
+}
+@model LoginUserViewModel
+
+<div class="login-clean">
+    <form asp-action="SettingsVerify" method="post">
+    
+        <div class="illustration mx-auto">
+            <img class="img-fluid" src="~/img/taxi-sing-in.png">
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="EmailAddress" class="control-label">Email Address</label>
+            <input asp-for="EmailAddress" class="form-control"/>
+            <span asp-validation-for="EmailAddress" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input type="password" asp-for="Password" class="form-control"/>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Verify" class="btn btn-primary btn-block"/>
+        </div>
+
+        <div class="form-group">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-block">Cancel</a>
+        </div>
+
+        <p class="forgot">You must verify your details to change account settings.</p>
+
+    </form>
+</div>

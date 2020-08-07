@@ -1,0 +1,55 @@
+@model ReportViewModel
+
+<div class="text-center">
+    <div class="jumbotron">
+        <img src="~/img/taxi-4.png" class="img-fluid mx-auto HomeImage " alt="woman sending message via dove">
+        <h1 class="display-4 HomeText">Tell us where you saw something!</h1>
+        <p class="lead HomeText">Hit the button, so we can get your current location.</p>
+        <hr class="my-4">
+        <button id="showMe" class="btn center-align pinkSolid mx-auto">
+        Find me!
+        </button>
+    </div>
+    <!-- Map -->
+    <div id="map"></div>
+
+    <form asp-controller="Report" asp-action="Create" id="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <div class="row">
+            <!-- Inputs -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="hidden" asp-for="Latitude" id="LatitudePos" class="form-control input_fields"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="hidden" asp-for="Longitude" id="LongitudePos" class="form-control  input_fields"/>
+                </div>
+            </div>
+            <input type="hidden" asp-for="GoogleAPIKey" id="APIKey" class="form-control  input_fields"/>
+        </div>
+        <!-- Text & Buttons -->
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="AdditionalInfo" class="control-label">Anything else?</label>
+                    <textarea asp-for="AdditionalInfo" rows="5" class="form-control" placeholder="Anything else we should know? ">
+                    
+                    </textarea>
+                    <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <!-- Buttons -->
+        <div class="row">
+            <div class="form-group mx-auto">
+                <input type="submit" value="Create" class="btn pinkSolid"/>
+                <a class="btn pinkHollow" asp-controller="Home" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuJE8XF8eQjJmF4mIez3fRxNQwLi0WjDc&libraries=&v=weekly" defer></script>
+    <script src="~/js/LoadLocation.js"></script>

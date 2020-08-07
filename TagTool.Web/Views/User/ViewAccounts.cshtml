@@ -1,0 +1,38 @@
+@model IList<TagTool.Data.Models.User>
+
+<h3> All accounts </h3>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" ><a asp-controller="Home" asp-action="AdminHome">Admin Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Viewing All Accounts</li>
+  </ol>
+</nav>
+
+<div class="table-responsive">
+<table class="table table-hover">
+    <thead>
+        <tr>
+        <th scope="col"><a asp-action="ViewAccounts" asp-route-OrderBy="Name">Name</a></th>
+        <th scope="col"><a asp-action="ViewAccounts" asp-route-OrderBy="Email">Email</a></th>
+        <th scope="col"><a asp-action="ViewAccounts" asp-route-OrderBy="Role">Role</a></th>
+        <th scope="col"><a asp-action="ViewAccounts" asp-route-OrderBy="City">City</a></th>
+        <th scope="col">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var User in Model)
+        {
+            <tr>
+                <th scope="row">@User.Name</th>
+                <td>@User.EmailAddress</td>
+                <td>@User.Role</td>
+                <td>@User.City.Name</td>
+                <td>
+                    <a asp-action="CloseAccount" asp-route-EmailAddress=@User.EmailAddress
+                    class="btn pinkHollow"> Close Account</a></td>
+            </tr>  
+        }   
+    </tbody>
+</table>
+</div>

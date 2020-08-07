@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "View all current reports.";
+}
+@model IList<TagTool.Data.Models.Report>
+<h3>Reports List</h3>
+
+<ul class="nav nav-pills justify-content-center">
+  <li class="nav-item">
+    <a class="nav-link" Asp-action="ReportsMap">View as Map</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" Asp-action="ViewReports">View as List</a>
+  </li>
+</ul>
+
+@if (Model.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+            <tr>
+            <th scope="col"><a asp-action="ViewReports" asp-route-OrderBy="Created">Created At</a></th>
+            <th scope="col">City</th>
+            <th scope="col">Three Word Address</th>
+            <th scope="col">Additional Info</th>
+            <th scope="col"><a asp-action="ViewReports" asp-route-OrderBy="Active">Active</a></th>
+            <th scope="col">View</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Report in Model)
+            {
+                <tr>
+                    <th scope="row">@Report.CreatedAtPretty()</th>
+                    <td>@Report.City.Name</td>
+                    <td>@Report.ThreeWordAddress</td>
+                    <td>@Report.AdditionalInfo</td>
+                    <td>@Report.ActivePretty()</td>
+                    <td>
+                        <a asp-action="ViewReport" asp-route-Id=@Report.ReportID 
+                        class="btn btn-primary pinkSolid"> View</a></td>
+                </tr>  
+            }   
+        </tbody>
+        </table>
+    </div>
+}
+@if (Model.Count < 1)
+{
+    <h2> No Reports Today!</h2>
+}

@@ -1,0 +1,16 @@
+@{
+    var message = TempData["Alert.Message"] ?? null;
+    var type = TempData["Alert.Type"] ?? null;
+    var BoldMessage = TempData["Alert.BoldMessage"] ?? null;
+}
+
+@if (message != null)
+{
+    <div class="alert alert-@type alert-dismissible fade show" role="alert"> 
+        <strong>@BoldMessage </strong>
+        @message 
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}

@@ -1,0 +1,325 @@
+using TagTool.Web.Controllers;
+using TagTool.Web.Models;
+using TagTool.Data.Repositories;
+using TagTool.Data.Services;
+using TagTool.Data.Models;
+using Xunit;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Linq;
+using Moq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using TagTool.Data.Secrets;
+
+namespace TagTool.Test
+{
+    [Collection("Integration")]
+    public class IntegrationTestsReports
+    {
+
+        /*
+        The following file contains integration tests related to Reports. These
+        tests may call on multiple components to complete the test. If these
+        tests fail, it indicates a system error may be occurring, when working
+        components are brought together.
+
+        These tests will run automatically alongside the unit-tests.
+        */
+
+        // Controllers
+        private readonly ReportController _ReportController;
+        private readonly UserController _UserController;
+
+        // Additional Dependencies
+        private readonly ISeeder _Seeder;
+        private readonly DataContext _db;
+        private readonly HttpContext httpContext;
+
+        public IntegrationTestsReports(
+            IReportService _ReportService, 
+            DataContext _db, 
+            IAccountService _AccountService,
+            ICityService _CityService,
+            ISeeder Seeder)
+            
+            {
+            // Controllers Set-Up
+            _ReportController = new ReportController(_db, _ReportService);
+            _UserController = new UserController(_db, _AccountService, _CityService);
+
+            // Dependencies
+            _Seeder = Seeder;
+            this._db = _db;
+            
+            // Create Temp Data Disctionary So Alerts dont throw errors.
+            httpContext = new DefaultHttpContext();
+        }
+
+        /* Below, tests that all the components required to properly submit
+        a report on the servers side are functional */
+        [Fact]
+        public async void Integration_CreateAReport_Success()
+        {
+            /* Given */
+            _ReportController.TempData =
+             new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
+
+            // User Accounts Added By Seed
+            _Seeder.Seed();
+
+            /* When */
+            // Open New Report Page 
+            var CreatePage = _ReportController.Create();
+            Assert.IsType<ViewResult>(CreatePage);
+
+            // Fill ViewModel
+            var FilledViewModel = new ReportViewModel()
+            {
+                Latitude = 54.717805,
+                Longitude = -6.226443,
+                AdditionalInfo = "Report from Antrim Castle Gardens",
+            };
+        
+            // Submit
+            var Result = (RedirectToActionResult) await _ReportController.Create(FilledViewModel);
+            
+            // Then 
+            Assert.Equal("Home", Result.ControllerName);
+            Assert.Equal("Index", Result.ActionName);
+
+            // Controller Calls Service, Service Should Get 3 Word Address
+            // Should Add To Database, and have Created at time
+            var CreatedReport = _db.Reports.FirstOrDefault(r => 
+            (r.Latitude == 54.717805) && (r.Longitude == -6.226443));
+            Assert.NotNull(CreatedReport);
+            Assert.NotNull(CreatedReport.ThreeWordAddress);
+            Assert.Equal("cares.sand.pacifist", CreatedReport.ThreeWordAddress);
+            Assert.Equal(DateTime.Now, CreatedReport.CreatedAt, TimeSpan.FromSeconds(10.00));
+
+            // Should Call Notify Function
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://api.testmail.app/api/json");
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            var Query = client.BaseAddress + 
+            "?apikey=" + GetKey.TestmailAPIKey() +"&namespace=9h5an";
+
+            TestMailResponse EmailResponse = null;
+            
+            HttpResponseMessage response = await client.GetAsync(Query);
+            if (response.IsSuccessStatusCode)
+            {
+                EmailResponse = await response.Content.ReadAsAsync<TestMailResponse>();
+            }
+
+            string ExpectedMessage = 
+            "A new Report has been created in Non-City Area. The Three word" +
+            " address of the report is: cares.sand.pacifist. To view on a map" +
+            " open:\n https://what3words.com/cares.sand.pacifist\n This" +
+            " report was created at " +
+            DateTime.Now.ToString() +
+            ", and the following" +
+            " was the additional information provided: Report from Antrim" +
+            " Castle Gardens\n\n Thank you! \n This message was auto-" +
+            "generated by HelpingHand & sent via MailGun. \nIf you want to" +
+            " stop recieving these messages, please turn off notifications" +
+            " in your account settings.\n";
+            
+            // Pattern Below Matches Return Strings using RegEx to ignore the 
+            // Time as this varies from report being sent to now.
+            var input = ExpectedMessage;
+            string pattern = 
+            @"\d+[/]\d+[/]\d+\s\d+[:]\d+[:]\d+"; 
+            String[] ExpectedElements = 
+            System.Text.RegularExpressions.Regex.Split(ExpectedMessage, pattern);
+            
+            bool EmailFound = false;
+
+
+            for(int i = 0; i < EmailResponse.emails.Length && !EmailFound; i++){
+                var Email = EmailResponse.emails[i];
+                String[] ReturnedElements = 
+                System.Text.RegularExpressions.Regex.Split(Email.text, pattern);
+                if ((ExpectedElements[0] == ReturnedElements[0]) && 
+                    (ExpectedElements[1] == ReturnedElements[1]))
+                {
+                    EmailFound = true;
+                }
+            }
+             
+            // Then
+            Assert.True(EmailFound);
+        }
+
+        /* Below test, tests that all the components required to properly view 
+        the list of all reports on the servers side are functional */
+        [Fact]
+        public void Integration_ViewReports_Success()
+        {
+            // Given: Seed
+            _Seeder.Seed();
+
+            // Call Contoller
+            var Result = _ReportController.ViewReports("") as ViewResult;
+
+            // Check That Page Loaded Contains list of reports
+            var List = (IList<Report>)Result.ViewData.Model;
+                // Ordered by created at Descending
+            var Expected = _db.Reports
+                .Include(r => r.City)
+                .OrderByDescending(r => r.CreatedAt).
+                ToList();
+            for (var i = 0; i < List.Count; i++)
+            {
+                Assert.Equal(Expected[i], List[i]);
+            }
+
+            // Reorder & Check
+            Result = _ReportController.ViewReports("Created") as ViewResult;
+
+            // Check That Page Loaded Contains list of reports
+            List = (IList<Report>)Result.ViewData.Model;
+            Expected = _db.Reports
+                .Include(r => r.City)
+                .OrderBy(r => r.CreatedAt).ToList();
+            for (var i = 0; i < List.Count; i++)
+            {
+                Assert.Equal(Expected[i], List[i]);
+            }
+
+            // Reorder & Check
+            Result = _ReportController.ViewReports("Active") as ViewResult;
+
+            // Check That Page Loaded Contains list of reports
+            List = (IList<Report>)Result.ViewData.Model;
+            Expected = _db.Reports
+                .Include(r => r.City)
+                .OrderByDescending(r => r.Active).ToList();
+            for (var i = 0; i < List.Count; i++)
+            {
+                Assert.Equal(Expected[i], List[i]);
+            }
+        }
+
+        /* Below test, tests that all the components required to properly view 
+        a single report, on the servers side are functional */
+        [Fact]
+        public void Integration_ViewReportById_Success()
+        {
+            // Given: Seed
+            _Seeder.Seed();
+
+            // Call Contoller
+            var Result = _ReportController.ViewReport(1) as ViewResult;
+
+            // Check That Page Loaded Contains  reports
+            var Report = (Report)Result.ViewData.Model;
+            var Expected = _db.Reports.First(e => e.ReportID == 1);
+            
+            Assert.Equal(Expected, Report);
+
+            // Repeat for a different ID as a secondary check
+            Result = _ReportController.ViewReport(5) as ViewResult;
+            Report = (Report)Result.ViewData.Model;
+            Expected = _db.Reports.First(e => e.ReportID == 5);
+            Assert.Equal(Expected, Report);
+        }
+
+        /* Below test, tests that all the components required to properly mark 
+        a report completed, on the servers side are functional */
+        [Fact]
+        public void Integration_MarkReportComplete_Success()
+        {
+            // Given: Seed
+            _Seeder.Seed();
+            _ReportController.TempData =
+             new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
+
+            // Call Contoller to get report
+            var ViewReport = _ReportController.ViewReport(1) as ViewResult;
+
+            // From that page Mark Report Complete
+            var RetrievedReport = (Report)ViewReport.ViewData.Model;
+           
+            // Call Controller to mark Complete
+            var Result = (RedirectToActionResult) _ReportController
+            .MarkReportComplete(RetrievedReport.CityID);
+
+            // Check The Page Redirects
+            Assert.Equal("ViewReports", Result.ActionName);
+            Assert.Equal("Report", Result.ControllerName);
+
+            // Check it was changed on the Database
+            var Expected = _db.Reports.First(e => e.ReportID == 1);
+            Assert.False(Expected.Active);
+        }
+
+        /* Below test, tests that all the components required to properly delete 
+        a report, on the servers side are functional */
+        [Fact]
+        public void Integration_DeleteAReport_Success()
+        {
+            // Given: Seed
+            _Seeder.Seed();
+            _ReportController.TempData =
+             new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
+
+            // Call Contoller to get report
+            var ViewReport = _ReportController.ViewReport(1) as ViewResult;
+
+            // From that page Load for delete
+            var RetrievedReport = (Report)ViewReport.ViewData.Model;
+           
+            // Call Controller to Delete
+            var Result =  
+            _ReportController.Delete(RetrievedReport.CityID) as ViewResult;
+
+            // Check The Page Contains Report to be deleted
+            var Report = (Report) Result.ViewData.Model;
+            var ExpectedToDelete = _db.Reports.First(e => e.CityID == 1);
+            Assert.Equal(ExpectedToDelete, Report);
+
+            // Now Confirm Delete is hit
+            var Return = (RedirectToActionResult) _ReportController
+            .ConfirmDelete(Report.CityID); 
+
+            // Check Redirect
+            Assert.Equal("ViewReports", Return.ActionName);
+            Assert.Equal("Report", Return.ControllerName);
+
+            // Check Report is removed from Database
+            var Deleted = _db.Reports.FirstOrDefault(e => 
+            e.ThreeWordAddress == ExpectedToDelete.ThreeWordAddress);
+            Assert.Null(Deleted);
+        }
+
+        /* Below test, tests that all the components required to properly view 
+        the list of all reports as a map on the servers side are functional */
+        [Fact]
+        public void Integration_ViewReportsMap_Success()
+        {
+            // Given: Seed
+            _Seeder.Seed();
+
+            // Call Contoller to get report map
+            var ViewReport = _ReportController.ReportsMap() as ViewResult;
+
+            // From that page Check for JSON
+            var RetrievedJSON = (string) ViewReport.ViewData.Model;
+
+            // Expected JSON previously retrived from the seed data
+            string Expected = 
+            "[{\"name\":\"input.estate.cloud\",\"lat\":54.5845,\"lon\":-5.934398,\"country\":\"GB\"},{\"name\":\"twigs.purple.pulled\",\"lat\":54.597216,\"lon\":-5.93042,\"country\":\"GB\"},{\"name\":\"legs.rivers.beats\",\"lat\":54.604949,\"lon\":-5.904914,\"country\":\"GB\"},{\"name\":\"silver.snap.castle\",\"lat\":54.598696,\"lon\":-5.927506,\"country\":\"GB\"},{\"name\":\"given.rash.toys\",\"lat\":54.997646,\"lon\":-7.31923,\"country\":\"GB\"},{\"name\":\"train.intent.divide\",\"lat\":55.006164,\"lon\":-7.32362,\"country\":\"GB\"},{\"name\":\"stone.birds.meal\",\"lat\":55.006219,\"lon\":-7.323624,\"country\":\"GB\"}]";
+
+            // Check JSON is valid
+            Assert.Equal(Expected, RetrievedJSON);
+        }
+    }
+}

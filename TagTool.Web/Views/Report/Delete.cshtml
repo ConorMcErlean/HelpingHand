@@ -1,0 +1,65 @@
+@{
+    ViewData["Title"] = "Confirm you wish to delete.";
+}
+@model TagTool.Data.Models.Report
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-asp-controller="Report" asp-action="ViewReports" asp-route-orderBy="">View All Reports</a></li>
+    <li class="breadcrumb-item" >View Report #@Model.ReportID</li>
+    <li class="breadcrumb-item active" aria-current="page">Confirm Delete of Report #@Model.ReportID</li>
+  </ol>
+</nav>
+
+<h3> Report ID: @Model.ReportID</h3>
+
+<!-- Table due to be replaced with Map -->
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Latitude</th>
+      <th scope="col">Longitude</th>
+    
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@Model.Latitude</td>
+      <td>@Model.Longitude</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Info table -->
+
+<table class="table table-borderless">
+  <thead>
+    <tr>
+      <th scope="col">Created</th>
+      <th scope="col">3 Word Address</th>
+      <th scope="col">Active</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@Model.CreatedAt</td>
+      <td>@Model.ThreeWordAddress</td>
+      <td>@Model.Active</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Text Box -->
+<h4> Additional Information: </h4>
+@Model.AdditionalInfo
+
+<!-- Buttons -->
+<form asp-action="ConfirmDelete">
+    <input type="hidden" asp-for="ReportID" class="form-control"/>
+    <div class="form-group">
+        <a class="btn btn-secondary" asp-action="ViewReport" asp-route-Id="@Model.ReportID">Cancel</a>
+        <input type="submit" value="Delete" class="btn btn-danger"/>
+        
+    </div>
+</form>

@@ -1,0 +1,88 @@
+@model RegisterViewModel
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" ><a asp-controller="Home" asp-action="AdminHome">Admin Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Creating a User, Name & Password.</li>
+  </ol>
+</nav>
+<div class="row justify-content-center">
+<form asp-action="Register">
+    <div class="row">
+        <!-- Name -->
+        <div class="col-md-6">
+            <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control">
+            <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- City Name -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="CityID" class="control-label">City</label>
+                <select asp-for="CityID" class="form-control" asp-items="@Model.Cities">
+                    <option>Select City</option>
+                </select>
+                <a asp-controller="User" asp-action="CreateCity"> City not here? Create one.</a>
+                <span asp-validation-for="CityID" class="text-danger"></span><br>
+                
+            </div>
+        </div>  
+    </div>
+
+    <div class="row">
+        <!-- EmailAddress -->
+        <div class="col-md-6">
+            <div class="form-group">
+            <label asp-for="EmailAddress" class="control-label">Email</label>
+            <input type="email" asp-for="EmailAddress" class="form-control">
+            <span asp-validation-for="EmailAddress" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Role -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="RoleString" class="control-label">Role</label>
+                <select asp-for="RoleString" class="form-control">
+                    <option>Select Role</option>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                </select>
+                <span asp-validation-for="RoleString" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Password -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input type="password" asp-for="Password" class="form-control">
+            <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Password -->
+        <div class="col-md-6">
+            <div class="form-group">
+            <label asp-for="PasswordConfirm" class="control-label">Re-Enter Password</label>
+            <input type="password" asp-for="PasswordConfirm" class="form-control">
+            <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+<!-- Buttons -->
+<div class="row justify-content-center">
+        <div class="form-group">
+            <input type="submit" value="Register" class="btn pinkSolid"/>
+            <a class="btn pinkHollow" asp-controller="Home" asp-action="AdminHome">Back</a>
+        </div>
+    </div>
+</form>
+</div>

@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Recent Report";
+}
+@model TagTool.Data.Models.Report
+<div class="ViewReport">
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-asp-controller="Report" asp-action="ViewReports" asp-route-orderBy="">View All Reports</a></li>
+    <li class="breadcrumb-item active" aria-current="page">View Report #@Model.ReportID</li>
+  </ol>
+</nav>
+
+<h3> Report ID: @Model.ReportID</h3>
+
+<input type="hidden" id="Longitude" value="@Model.Longitude" />
+<input type="hidden" id="Latitude" value="@Model.Latitude" />
+
+<div id="mapR"></div>
+
+<!-- Info table -->
+<div class="text-center">
+
+<div class="row">
+  <div class="col-md-4">
+    <h4>Created at</h4>
+    <p>@Model.CreatedAt <br> @Model.CreatedAtPretty()</p>
+  </div>
+  <div class="col-md-4">
+    <h4>3 Word Address</h4>
+    <p>@Model.ThreeWordAddress</p>
+  </div>
+  <div class="col-md-4">
+     <h4>Active</h4>
+      <p>@Model.ActivePretty()</p>
+  </div>
+</div>
+
+<!-- Text Box -->
+<h4> Additional Information: </h4>
+@Model.AdditionalInfo
+
+<!-- Buttons -->
+<form asp-action="MarkReportComplete">
+      <input type="hidden" asp-for="ReportID" class="form-control"/>
+      <div class="form-group">
+          @if(Model.Active){<input type="submit" value="Mark Completed" class="btn pinkSolid"/>}
+          <a class="btn pinkHollow" asp-action="Delete" asp-route-Id=@Model.ReportID>Delete Report</a>
+      </div>
+  </form>
+</div>
+</div>
+<!-- Map Loading Script-->
+<script src="~/js/LoadReportMap.js"></script>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuJE8XF8eQjJmF4mIez3fRxNQwLi0WjDc&callback=initMap">
+</script>

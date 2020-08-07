@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "View all current reports.";
+}
+@model string
+
+<h3>Reports Map</h3> 
+
+<ul class="nav nav-pills justify-content-center">
+  <li class="nav-item">
+    <a class="nav-link active" Asp-action="ReportsMap">View as Map</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" Asp-action="ViewReports">View as List</a>
+  </li>
+</ul>
+
+
+<input type="hidden" id="jsonInput" value="@Model.ToString()">
+<div id="ReportMapContainer"></div>
+
+<script src="~/js/LoadReportsMap.js"></script>

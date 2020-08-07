@@ -1,2 +1,2 @@
-# HelpingHand
-An ASP.NET core application to simplify homelessness outreach
+# COM814-Project
+MSc. final project.

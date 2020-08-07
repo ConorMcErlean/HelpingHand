@@ -1,0 +1,32 @@
+<div class="text-center">
+  <div class="jumbotron mx-auto">
+    <img src="~/img/taxi-teamsport.png" class="img-fluid rounded HomeImage mx-auto" alt="ants carrying a log">
+    <h1 class="display-4">Hello, @User.Identity.Name!</h1>
+    <p class="lead">You're an admin so you keep the team running!</p>
+    <hr class="my-4">
+    <p>Use a function below to make changes.</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-3 my-2">
+      <a asp-controller="User" asp-action="Register" class="btn btn-outline-info btn-lg admin-btn">Create Account</a>
+    </div>
+    <div class="col-md-3 my-2">
+      <a asp-controller="User" asp-action="ViewAccounts" class="btn btn-outline-info btn-lg admin-btn">Manage Accounts</a>
+    </div>
+    <div class="col-md-3 my-2">
+      <a asp-controller="Report" asp-action="ViewReports" class="btn btn-outline-info btn-lg admin-btn">View Reports</a>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-3 my-2">
+      <a asp-controller="User" asp-action="CreateCity" class="btn btn-outline-info btn-lg admin-btn">Create City</a>
+    </div>
+    <div class="col-md-3 my-2">
+      <a asp-controller="Report" asp-action="ReportsMap" class="btn btn-outline-info btn-lg admin-btn">View Reports on Map</a>
+    </div>
+    <div class="col-md-3 my-2">
+      <a asp-controller="User" asp-action="SettingsVerify" class="btn btn-outline-info btn-lg admin-btn">Account Settings</a>
+    </div>
+  </div>
+</div>

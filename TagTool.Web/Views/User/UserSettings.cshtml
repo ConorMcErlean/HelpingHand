@@ -1,0 +1,23 @@
+@model string
+
+<input type="hidden" id="Email" value="@Model.ToString()">
+<div class="text-center">
+<div class="jumbotron mx-auto">
+  <img src="~/img/taxi-tasks-done.png" class="img-fluid rounded HomeImage mx-auto" alt="robot looking at checklist">
+  <h1 class="display-4">Time to make some changes @User.Identity.Name?</h1>
+  <p class="lead">Change account settings here.</p>
+  <hr class="my-4">
+  <p>Use a function below to make changes.</p>
+ 
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-4 my-2">
+    <a asp-controller="User" asp-action="ChangeEmail" asp-route-Email="@Model.ToString()" class="btn btn-outline-info btn-lg admin-btn" >Change Email</a>
+  </div>
+  
+  <div class="col-md-4 my-2">
+    <a asp-controller="User" asp-action="ChangePassword" asp-route-Email="@Model.ToString()" class="btn btn-outline-info btn-lg admin-btn">Change Password</a>
+  </div>
+</div>
+</div>

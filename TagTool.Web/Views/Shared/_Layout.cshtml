@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TagTool.Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/stock/modules/data.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/gb/gb-all.js"></script>
+<script src="https://code.highcharts.com/modules/marker-clusters.js"></script>
+<script src="https://code.highcharts.com/modules/coloraxis.js"></script>
+</head>
+<body>
+    <header class="d-none d-md-block">
+        @* Web Screen Nav *@
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 ">
+            @if (User.IsInRole("Admin"))
+                {
+                <a asp-action="AdminHome" asp-controller="Home" class="btn pinkHollow align-left">Admin Tools</a>
+                }
+                @if (User.IsInRole("User"))
+                {
+                <a asp-action="ViewReports" asp-controller="Report" class="btn pinkHollow align-left">View Current Reports</a>
+                }
+            <div class="container">
+                <a class="navbar-brand mx-auto" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/HelpingHandLogoTransparentWide.png" width="100" height="60" class="d-inline-block align-top mx-auto" alt="" loading="lazy"></a>
+            </div>
+        
+            <partial name="_Login"/>
+        </nav>
+    </header>
+    <header class="d-block d-sm-none">
+        @* Mobile Screen Nav *@
+        <nav class="navbar navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <!-- Image and drop down -->
+            <a class="navbar-brand mx-auto" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/img/HelpingHandLogoTransparentWide.png" width="100" height="60" class="d-inline-block align-top mx-auto" alt="" loading="lazy"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Options" aria-controls="Options" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Drop Down Content -->
+            <div class="collapse navbar-collapse" id="Options">
+                 @if (User.IsInRole("Admin"))
+                    {
+                    <a asp-action="AdminHome" asp-controller="Home" class="btn pinkHollow align-left">Admin Tools</a>
+                    }
+                    @if (User.IsInRole("User"))
+                    {
+                    <a asp-action="ViewReports" asp-controller="Report" class="btn pinkHollow align-left">View Current Reports</a>
+                    }
+                    <partial name="_Login"/>
+            </div>
+        
+        </nav>
+    </header>
+    
+    <div class="container rounded">
+        <main role="main" class="pb-3">
+            <partial name="_RenderAlert" />
+            @RenderBody()
+
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="text-center">
+            HelpingHand Tool <a asp-area="" asp-controller="Home" asp-action="About"> About us</a>
+        </div>
+    </footer>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootbox/bootbox.all.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
