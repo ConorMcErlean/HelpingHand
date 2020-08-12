@@ -33,8 +33,8 @@ If reusing images, ensure you meet the license:
 
 ## Current Build
 ### Known Bugs
-- [ ]  When you submit a report without getting you're current location, it may submit with false co-ordinates
-- [ ] The map is currently broken on the view report page
+- [x]  When you submit a report without getting you're current location, it may submit with false co-ordinates
+- [x] The map is currently broken on the view report page
 - [ ] Changing a user's password causes an error
 - [ ] Delete Report page needs updated styling
 - [ ] Forms need padding on mobile
