@@ -34,7 +34,12 @@ namespace TagTool.Web.Controllers
         {
             var rvm = new ReportViewModel()
             {
-                GoogleAPIKey = GetKey.GoogleAPIKey()
+                GoogleAPIKey = GetKey.GoogleAPIKey(),
+                /* While not the most elegent fix, the view models lat & long 
+                must be above 90 to ensure that you cannot submit blank reports.
+                This is due to doubles being non-nullable */
+                Latitude = 999,
+                Longitude = 999
             };
             return View(rvm);
         }
