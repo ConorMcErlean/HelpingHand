@@ -810,3 +810,5 @@ TagTool.Test/bin/Debug/netcoreapp3.1/ReportTest.db
 TagTool.Test/bin/Debug/netcoreapp3.1/SeedTest.db
 TagTool.Test/bin/Debug/netcoreapp3.1/TagTool.Test.dll
 TagTool.Test/bin/Debug/netcoreapp3.1/TagTool.Test.pdb
+TagTool.Data/Secrets.cs
+TagTool.Web/appsettings.json
