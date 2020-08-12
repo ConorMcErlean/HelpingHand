@@ -66,6 +66,7 @@ namespace TagTool.Web.Controllers
         {
             var Report = _svc.GetById(Id);
             if (Report == null){ return NotFound(); }
+            TempData["MapsAPIKey"] = GetKey.GoogleAPIKey();
             return View(Report);
         }   
 
