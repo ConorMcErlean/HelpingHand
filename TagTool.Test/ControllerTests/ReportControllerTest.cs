@@ -201,6 +201,8 @@ namespace TagTool.Test
             _svc.Setup(m => m.GetById(1))
                 .Returns(r1);
             var _Controller = new ReportController(_db,_svc.Object);
+            _Controller.TempData =
+             new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
 
             // When
             var Result = _Controller.ViewReport(1) as ViewResult;
