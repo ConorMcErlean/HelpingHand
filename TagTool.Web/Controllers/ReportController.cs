@@ -34,7 +34,12 @@ namespace TagTool.Web.Controllers
         {
             var rvm = new ReportViewModel()
             {
-                GoogleAPIKey = GetKey.GoogleAPIKey()
+                GoogleAPIKey = GetKey.GoogleAPIKey(),
+                /* While not the most elegent fix, the view models lat & long 
+                must be above 90 to ensure that you cannot submit blank reports.
+                This is due to doubles being non-nullable */
+                Latitude = 999,
+                Longitude = 999
             };
             return View(rvm);
         }
@@ -66,6 +71,7 @@ namespace TagTool.Web.Controllers
         {
             var Report = _svc.GetById(Id);
             if (Report == null){ return NotFound(); }
+            TempData["MapsAPIKey"] = GetKey.GoogleAPIKey();
             return View(Report);
         }   
 
@@ -94,6 +100,7 @@ namespace TagTool.Web.Controllers
                 Alert("Report Not Found", AlertType.warning);
                 return RedirectToAction("ViewReports", "Report");
             }
+            TempData["MapsAPIKey"] = GetKey.GoogleAPIKey();
             Alert("Report will Be permanently deleted, are you sure?", 
                 AlertType.danger);
             return View(Report);

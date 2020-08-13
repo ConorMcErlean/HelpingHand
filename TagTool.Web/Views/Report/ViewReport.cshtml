@@ -50,6 +50,7 @@
 </div>
 </div>
 <!-- Map Loading Script-->
+@{ var MapsAPI = TempData["MapsAPIKey"] ?? null;}
 <script src="~/js/LoadReportMap.js"></script>
-<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuJE8XF8eQjJmF4mIez3fRxNQwLi0WjDc&callback=initMap">
+<script defer src="https://maps.googleapis.com/maps/api/js?key=@MapsAPI&callback=initMap">
 </script>

@@ -215,6 +215,8 @@ namespace TagTool.Test
         {
             // Given: Seed
             _Seeder.Seed();
+            _ReportController.TempData =
+             new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
 
             // Call Contoller
             var Result = _ReportController.ViewReport(1) as ViewResult;

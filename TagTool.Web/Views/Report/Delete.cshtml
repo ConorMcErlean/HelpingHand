@@ -13,8 +13,15 @@
 
 <h3> Report ID: @Model.ReportID</h3>
 
-<!-- Table due to be replaced with Map -->
+<!-- Map -->
+<input type="hidden" id="Longitude" value="@Model.Longitude" />
+<input type="hidden" id="Latitude" value="@Model.Latitude" />
 
+<div id="mapR"></div>
+
+<!-- Info -->
+
+<div class="text-center">
 <table class="table">
   <thead class="thead-dark">
     <tr>
@@ -33,33 +40,40 @@
 
 <!-- Info table -->
 
-<table class="table table-borderless">
-  <thead>
-    <tr>
-      <th scope="col">Created</th>
-      <th scope="col">3 Word Address</th>
-      <th scope="col">Active</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>@Model.CreatedAt</td>
-      <td>@Model.ThreeWordAddress</td>
-      <td>@Model.Active</td>
-    </tr>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-md-4">
+    <h4>Created at</h4>
+    <p>@Model.CreatedAt <br> @Model.CreatedAtPretty()</p>
+  </div>
+  <div class="col-md-4">
+    <h4>3 Word Address</h4>
+    <p>@Model.ThreeWordAddress</p>
+  </div>
+  <div class="col-md-4">
+     <h4>Active</h4>
+      <p>@Model.ActivePretty()</p>
+  </div>
+</div>
 
 <!-- Text Box -->
 <h4> Additional Information: </h4>
 @Model.AdditionalInfo
 
 <!-- Buttons -->
+<br>
 <form asp-action="ConfirmDelete">
     <input type="hidden" asp-for="ReportID" class="form-control"/>
     <div class="form-group">
-        <a class="btn btn-secondary" asp-action="ViewReport" asp-route-Id="@Model.ReportID">Cancel</a>
-        <input type="submit" value="Delete" class="btn btn-danger"/>
+        <a class="btn pinkHollow" asp-action="ViewReport" asp-route-Id="@Model.ReportID">Cancel</a>
+        <input type="submit" value="Delete" class="btn pinkSolid"/>
         
     </div>
+  
 </form>
+</div>
+
+<!-- Map Loading Script-->
+@{ var MapsAPI = TempData["MapsAPIKey"] ?? null;}
+<script src="~/js/LoadReportMap.js"></script>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=@MapsAPI&callback=initMap">
+</script>

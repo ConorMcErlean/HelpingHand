@@ -13,7 +13,8 @@ namespace TagTool.Web.Models
         [Required]
         public int CityID {get; set;}
         
-        [Required]
+        [Required][StringLength(32, MinimumLength = 2, ErrorMessage= 
+        "Shortest allowed name is 2 characters.")]
         public string Name {get; set;}
 
         [Required]
