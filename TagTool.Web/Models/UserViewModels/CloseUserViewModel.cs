@@ -5,7 +5,7 @@ namespace TagTool.Web.Models
 {
     public class CloseUserViewModel
     {
-
+        // No validation required as this viewmodel is built by the server.
         [EmailAddress]
         public string EmailAddress {get; set; }
 
