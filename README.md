@@ -45,9 +45,10 @@ If reusing images, ensure you meet the license:
 
 ### Report Tasks still to be completed
 - [ ] User testing section
-- [ ] Heading 3 Numbers needed fixed
+- [x] Heading 3 Numbers needed fixed
 - [ ] User feedback needs added to appendix
-- [ ] Use case diagrams need added to appendix
+- [x] Use case diagrams need added to appendix
+- [ ] Fix formatting of References that reappear (Eg. Microsoft 2020)
 
 # Ideas for future work
 If you, or someone you know would like an example project to work on, here are some possible modifications that could be made.
