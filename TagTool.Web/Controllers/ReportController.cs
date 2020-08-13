@@ -100,6 +100,7 @@ namespace TagTool.Web.Controllers
                 Alert("Report Not Found", AlertType.warning);
                 return RedirectToAction("ViewReports", "Report");
             }
+            TempData["MapsAPIKey"] = GetKey.GoogleAPIKey();
             Alert("Report will Be permanently deleted, are you sure?", 
                 AlertType.danger);
             return View(Report);
