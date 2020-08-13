@@ -35,6 +35,7 @@ If reusing images, ensure you meet the license:
 ### Known Bugs
 - [x]  When you submit a report without getting you're current location, it may submit with false co-ordinates
 - [x] The map is currently broken on the view report page
+
 - [x] ~~Changing a user's password causes an error~~ Appears to have just been a reset operation occured while I was testing.
 - [x] Delete Report page needs updated styling
 - [x] Forms need padding on mobile
