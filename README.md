@@ -33,13 +33,14 @@ If reusing images, ensure you meet the license:
 
 ## Current Build
 ### Known Bugs
-- [ ]  When you submit a report without getting you're current location, it may submit with false co-ordinates
-- [ ] The map is currently broken on the view report page
+- [x]  When you submit a report without getting you're current location, it may submit with false co-ordinates
+- [x] The map is currently broken on the view report page
 - [ ] Changing a user's password causes an error
-- [ ] Delete Report page needs updated styling
-- [ ] Forms need padding on mobile
+- [x] Delete Report page needs updated styling
+- [x] Forms need padding on mobile
 - [ ] Need an alternative solution to get the user's email to change settings
-- [ ] Improve view model validation
+- [x] Improve view model validation
+- [ ] Due to how what3words presents 'nearest place' cities may not link to reports.
 
 ### Report Tasks still to be completed
 - [ ] User testing section
