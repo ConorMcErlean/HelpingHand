@@ -1,4 +1,3 @@
-
 using TagTool.Data.Models;
 using TagTool.Data.Services;
 using TagTool.Data.Repositories;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace TagTool.Web.Controllers
 {
@@ -193,6 +193,16 @@ namespace TagTool.Web.Controllers
             return  new ClaimsPrincipal(claims);
         }
 
+        // Retrieves user Email For changing Settings.
+        public IActionResult SettingsVerify()
+        {
+            // Below Is best way I've discovered of retrieving Email from Cookie.
+            var Claims = HttpContext.User.Claims;
+            var ClaimsEnumerator = Claims.GetEnumerator();
+            ClaimsEnumerator.MoveNext();
+            var Email = ClaimsEnumerator.Current.Value;
+            return RedirectToAction("UserSettings", "User", new{Email});
+        }
 
         // Access User Settings
         [Authorize]
@@ -271,29 +281,5 @@ namespace TagTool.Web.Controllers
             return View(vm);
         }
 
-        //  
-        public IActionResult SettingsVerify()
-        {
-            return View();
-        }
-
-        // 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult SettingsVerify([Bind("EmailAddress,Password")]LoginUserViewModel m)
-        { 
-            // call service to Autheticate User
-            var user = _svc.Authenticate(m.EmailAddress, m.Password);  
-            
-            // verify if user found and if not then add a model state e
-            if (user == null)
-            {
-                ModelState.AddModelError("EmailAddress", "Invalid Login Credentials");
-                ModelState.AddModelError("Password", "Invalid Login Credentials");
-                return View(m);
-            }  
-            string Email = m.EmailAddress;
-            return RedirectToAction("UserSettings", "User" , new {Email} );
-        }
     }
 }

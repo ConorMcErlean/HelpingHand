@@ -17,6 +17,10 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Collections;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TagTool.Test
 {
@@ -221,36 +225,18 @@ namespace TagTool.Test
         [Fact]
         public void Integration_AccessUserSettings_Success()
         {
+            // Email that should be found
+            string TestEmail = "Test@Test.com";
             // Seed
             _Seeder.Seed();
 
-            // Open Settings Verify Page
-            Assert.IsType<ViewResult>(_UserController.SettingsVerify());
-
-            // Fill View Model
-            var ViewModel = new LoginUserViewModel(){
-                EmailAddress = "9h5an.test@inbox.testmail.app",
-                Password ="ce@gIPP!Z!XESF2#b8sCaIKfi8maEHV@j7lLUfzegWX&2cBs&F&#"
-            };
-
-            // Call Controller
-            var Redirect = (RedirectToActionResult) 
-            _UserController.SettingsVerify(ViewModel);
-
-            // Check Redirect
-            var RouteValue = (Object[]) Redirect.RouteValues.Values;
-            
-            Assert.Equal("User", Redirect.ControllerName);
-            Assert.Equal("UserSettings", Redirect.ActionName);
-            Assert.Equal(ViewModel.EmailAddress, RouteValue[0].ToString());
-
             // Call This Action
             var SettingsPage = 
-            _UserController.UserSettings(ViewModel.EmailAddress) as ViewResult;
+            _UserController.UserSettings(TestEmail) as ViewResult;
 
             // Check Model contains Email
             var Email = (string) SettingsPage.ViewData.Model;
-            Assert.Equal(ViewModel.EmailAddress, Email);
+            Assert.Equal(TestEmail, Email);
         }
 
         /* Below, tests that all the components required to change a user's 
