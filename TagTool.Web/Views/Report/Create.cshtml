@@ -35,7 +35,8 @@
             <div class="col">
                 <div class="form-group">
                     <label asp-for="AdditionalInfo" class="control-label">Anything else?</label>
-                    <textarea asp-for="AdditionalInfo" rows="5" class="form-control" placeholder="Anything else we should know? ">
+                    <textarea asp-for="AdditionalInfo" rows="5" class="form-control" 
+                    placeholder="Anything else we should know? Hidden behind something? Need medical assistance? Sleeping without a sleeping bag?">
                     
                     </textarea>
                     <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
@@ -45,7 +46,7 @@
         <!-- Buttons -->
         <div class="row">
             <div class="form-group mx-auto">
-                <input type="submit" value="Create" class="btn pinkSolid"/>
+                <input type="submit" value="Submit" class="btn pinkSolid"/>
                 <a class="btn pinkHollow" asp-controller="Home" asp-action="Index">Cancel</a>
             </div>
         </div>
