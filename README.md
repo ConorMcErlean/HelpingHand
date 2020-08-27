@@ -40,15 +40,15 @@ If reusing images, ensure you meet the license:
 - [x] Delete Report page needs updated styling
 - [x] Forms need padding on mobile
 - [x] Improve view model validation
-- [ ] Need an alternative solution to get the user's email to change settings
+- [x] Need an alternative solution to get the user's email to change settings
 - [ ] Due to how what3words presents 'nearest place' cities may not link to reports.
 
 ### Report Tasks still to be completed
-- [ ] User testing section
+- [x] User testing section
 - [x] Heading 3 Numbers needed fixed
 - [ ] User feedback needs added to appendix
 - [x] Use case diagrams need added to appendix
-- [ ] Fix formatting of References that reappear (Eg. Microsoft 2020)
+- [x] Fix formatting of References that reappear (Eg. Microsoft 2020)
 
 # Ideas for future work
 If you, or someone you know would like an example project to work on, here are some possible modifications that could be made.
